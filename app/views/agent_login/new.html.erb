@@ -1,0 +1,37 @@
+<%provide(:title, resource_name)%>
+<div class="container">
+	<div class="row">
+		<div id="companyprofile" class="col-xs-offset-1 col-sm-offset-3 col-sm-6 col-xs-10">
+			<p style="text-transform:uppercase;"><%= resource_name%> SIGN IN</p>
+		</div>
+	</div>
+	<div class="row">
+		<div id="createcompanyform" class="col-xs-offset-1 col-sm-offset-3 col-sm-6 col-xs-10">
+			<%= form_for(resource, :as => resource_name, :url => session_path(resource_name), class: 'form-horizontal') do |f| %>
+				<div class="col-sm-offset-1 col-sm-10">
+			  <div class="input-div">
+			  	<%= f.label :email %><br />
+			  	<%= f.email_field :email, :autofocus => true, :class=>'form-control'%>
+			  </div>
+			
+			  <div class="input-div">
+			  	<%= f.label :password %><br />
+			  	<%= f.password_field :password, :class=>'form-control' %>
+			  </div>
+			
+			  <% if devise_mapping.rememberable? -%>
+			    <div class="input-div">
+			    	<%= f.label :remember_me, :class=>'inline' %>
+			    	<%= f.check_box :remember_me %> 
+			    </div>
+			  <% end %>
+			
+			  <div class="input-div">
+			  	<%= f.submit 'Sign in',:class=>'btn btn-default pull-right' %>
+			  </div>
+			<% end %>
+			</div>
+		
+		</div>
+	</div>
+</div>	

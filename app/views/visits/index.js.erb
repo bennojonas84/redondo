@@ -1,0 +1,4 @@
+$("#visits_list").html("<%= escape_javascript(render 'visits') %>");
+$('tr.view-visit-detail').click(function() {
+  viewvisitdetail(this);
+});

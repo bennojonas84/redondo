@@ -1,0 +1,68 @@
+<div class="section" id="mobileapp_page">
+  <div class="container">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-xs-6">
+              <%= image_tag 'RM-ios1.jpeg', class: 'img-responsive img-thumbnail' %>
+            </div>
+            <div class="col-xs-6">
+              <%= image_tag 'RM-ios2.jpeg', class: 'img-responsive img-thumbnail' %>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h5 style="line-height: 25px;">
+            <%= link_to 'Retail Mapper', 'http://itunes.apple.com/us/app/retail-mapper/id650172619?mt=8', :target => '_blank' %>
+            allows you to visualize point of sale material in real time.
+            <br/><br/>
+            It’s fun and easy to use.
+            Simply choose a retail location.
+            Choose a retail location.
+            Snap a photo, or select an image from your camera library.
+            Select an image from camera library
+            Drag and drop point of sale assets onto the image. Move, resize, reshape, and annotate over your newly created image.
+            Apply photo filter
+            Save and publish to the cloud and wallah, you’re done.
+            <br/><br/>
+            In less than two minutes you are now able to completely visualize a retail makeover, all from your device.
+            Collect and index photos of retail environments right from your palm.
+            <br/><br/>
+            Retail Mapper is ideal for on the road field marketing and merchandising teams. Wow your retailers today, just contact us to get setup with an account at <a href="mailto:'info@skurun.com'">info@skurun.com</a>.
+          </h5>
+
+          <div id="mobileapp_gallery" class="jThumbnailScroller">
+            <div class="jTscrollerContainer">
+              <div class="jTscroller">
+                <% [1].each do |index| %>
+                    <%= link_to asset_url("screenshot#{index.to_s}.jpg"), class: "fancybox no-bg", rel: "group1" do %>
+                        <%= image_tag "screenshot#{index.to_s}.jpg", class: "thumb" %>
+                    <% end %>
+                <% end %>
+              </div>
+            </div>
+            <a href="#" class="jTscrollerPrevButton"></a>
+            <a href="#" class="jTscrollerNextButton"></a>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      $(".jThumbnailScroller").thumbnailScroller({
+          scrollerType:"clickButtons",
+          scrollerOrientation:"horizontal",
+          scrollEasing:"easeOutCirc",
+          scrollEasingAmount:800,
+          acceleration:4,
+          scrollSpeed:800,
+          noScrollCenterSpace:10,
+          autoScrolling:0,
+          autoScrollingSpeed:2000,
+          autoScrollingEasing:"easeInOutQuad",
+          autoScrollingDelay:500
+      });
+  });
+</script>

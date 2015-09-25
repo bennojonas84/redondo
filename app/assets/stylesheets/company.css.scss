@@ -1,0 +1,98 @@
+// Place all the styles related to the company controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#_companyform{
+  background-color: #cccccc;
+  padding: 15px;
+  height: 450px;
+  
+  label{
+    font-weight: bold;
+    color: #999999;
+    text-transform: uppercase;
+  }
+
+}
+
+#adminpanel{
+  margin-top: 20px;
+  background-color: #cccccc;
+  text-align: center;
+  color: #eeeeee;
+  font-weight: bold;
+  padding: 15px;
+  font-size: 16px;
+}
+
+#createcompanyform{
+  padding: 15px;
+  height: 430px;
+  
+  label{
+    font-weight: bold;
+    color: #999999; 
+    text-transform: uppercase;
+    padding-left: 0px;
+  }
+}
+
+#companyprofile{
+  padding: 15px;
+  p{
+    background-color: #808080;
+    color: #eeeeee;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+.newcompanybutton{
+  color: #666666 !important;
+  margin-bottom: 15px !important;
+}
+
+#company_uber_admin {
+  #explain {
+    text-align: center;
+    padding: 15px 0;
+    p {
+      font-weight:medium;
+      font-size: 1.2em;
+    }
+  }
+
+  #assignement_message {
+    display: none;
+  }
+
+  #all_uber_admins {
+    min-height: 500px;
+    background-color: white;
+    table#uber_admins {
+      td {
+        height:50px;
+        line-height: 30px;
+      }
+    }
+  }
+  #assigned_uber_admin {
+    min-height: 500px;
+    background-color: #15a85a;
+    h5 {
+      padding-top:10px;
+      padding-bottom:10px;
+      text-align: center;
+    }
+    #droppable { 
+      min-height: 350px;
+      text-align: center;
+      font-weight: bold;
+
+    }
+    .hovering-for-drop {
+        background-color: #d3d823;
+      }
+  }
+}
+

@@ -1,0 +1,40 @@
+<%provide(:title,'VIEW AGENT VISITS')%>
+<div class="container" id="visits_page">
+  <div class="row">
+    <div class="col-md-12 breadplus">
+      <ol class="breadcrumb">
+        <li><%= link_to "Assets", "/assets?id=#{@asset.id}" %></li>
+        <li class='active'>View < <%= @agent.first_name %> <%= @agent.last_name %> > Visits</li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3" id="side_menu">
+      <%= render partial: 'layouts/side_menu', locals: {companyuser: @companyuser, agents: @agents, assets: @assets, visits: @visits} %>
+    </div>
+    <div class="col-md-9 visits_content">
+      <header class="visits-table-header">
+        <div class="row">
+          <div class="col-xs-7 title">
+            <h3>
+              VIEW ASSET VISITS
+              <small>&nbsp&nbsp&nbspTotal: <%= @assetvisits.count %></small>
+            </h3>
+          </div>
+          <div class="col-xs-4">
+            <%= form_tag visits_path, :method=>'get', :id=>'visits_search', :class=>'form-horizontal', remote: true do %>
+                <div class="form-group">
+                  <label class="sr-only">Search:</label>
+                  <%= text_field_tag :search, params[:search], placeholder: 'search', class: 'form-control' %>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      </header>
+
+      <div id="visits_list">
+        <%= render 'assetvisits' %>
+      </div>
+    </div>
+  </div>
+</div>

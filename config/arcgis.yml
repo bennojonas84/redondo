@@ -1,0 +1,15 @@
+development:
+  client_id: 'vUaQ8uIaRbH64yz6'
+  client_secret: 'cb2c8ca63fc84fc7934fb373334e805b'
+
+production:
+  client_id: 'vUaQ8uIaRbH64yz6'
+  client_secret: 'cb2c8ca63fc84fc7934fb373334e805b'
+
+staging:
+  client_id: 'vUaQ8uIaRbH64yz6'
+  client_secret: 'cb2c8ca63fc84fc7934fb373334e805b'
+
+test:
+  client_id: 'vUaQ8uIaRbH64yz6'
+  client_secret: 'cb2c8ca63fc84fc7934fb373334e805b'

@@ -1,0 +1,22 @@
+<%provide(:title,'Admin')%>
+<div class="container">
+	<h1>Admin#home</h1>
+	<div class="row">
+		<div id="companyprofile" class="col-md-4">
+			<p>ADMIN LOGIN</p>
+		</div>
+	</div>
+	<div class="row">
+		<div id="createcompanyform" class="col-md-4">
+			<%= form_tag( companies_path , :method => "get" ) do %>
+				<%= label_tag :USERNAME %>
+				<%= text_field_tag :username %>
+	
+				<%= label_tag :PASSWORD %>
+				<%= password_field_tag :password %>
+				
+				<%= submit_tag "LOGIN", :class=>"button" %>
+			<% end %>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<%provide(:title,'VIEW HISTORY')%>
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<%= button_to "Back", admin_companies_path, :method=>"get",:class=>"btn pull-right" %>
+			<div style="clear:both;height: 15px;"></div>
+		    <table cellpadding="5" class="fix-table table-hover">
+		    	<thead>
+		    		<tr style="background:#e6e6e6;">
+		    			<td class="id">ID</td>
+		    			<td width="20%">ACTIVE</td>
+		    			<td width="10%">ACTION</td>
+		    			<td width="20%">PASSIVE</td>
+		    			<td width="15%">COMPANY</td>
+		    			<td width="15%">VIEW</td>
+		    			<td width="15%">DATE</td>
+		    		</tr>
+		    	</thead>
+		    	<tbody>
+				    <% @histories.each do |history|%>
+				   		<tr style="border-bottom: 1px solid #e6e6e6;cursor:pointer;" >
+				   			<td class="id"><%= history.id %></td>
+							<td><%= history.active_name %></td>
+							<td><%= history.action %></td>
+							<td><%= history.passive_name %></td>
+							<td><%= history.company_name %></td>
+							<td><%= history.sort %></td>
+							<td><%= history.action_date %></td>
+				   		</tr>
+				    <% end%>
+				</tbody>
+			</table>
+			<%= will_paginate @histories%>
+		</div>
+	</div>
+</div>

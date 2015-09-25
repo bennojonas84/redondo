@@ -1,0 +1,142 @@
+// Place all the styles related to the Agents controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+// #tab{
+//   ul{ 
+//     margin: 10px 0;
+//     width: 201px;
+//     color: #cccccc;
+//     li{
+//       list-style: none;
+//       line-height: 40px;
+//       font-weight: bold;
+//       font-size: 14px;
+//       &.first {
+//         background-color: #999999;
+//         padding-left: 10px;
+//         font-size: 16px;
+//       }
+//       a.tab{
+//         span{
+//           display: block;
+//           padding-left:10px;
+//           color: #cccccc;
+//           text-decoration: none;
+//         }
+//       }
+//     }
+//   }
+// }
+// #tab {
+//   ul {
+//     margin: 10px 0;
+//     width: 201px;
+//     color: #cccccc;
+//     li {
+//       list-style: none;
+//       line-height: 40px;
+//       font-weight: bold;
+//       font-size: 14px;
+//       &.first {
+//         background-color: #999999;
+//         padding-left: 10px;
+//         font-size: 16px;
+//       }
+//       a.tab {
+//         span.menu {
+//           display: block;
+//           padding-left:10px;
+//           color: #cccccc;
+//           text-decoration: none;
+//           border-bottom: 1px solid #e6e6e6;
+//           &:hover {
+//             color:purple;
+//             background-color: #e6e6e6;
+//           }
+//           span.count {
+//             float:right;
+//             margin-right: 20px;
+//           }
+//         }
+//       }
+//       span.menu {
+//         display: block;
+//         padding-left:10px;
+//         color: #cccccc;
+//         text-decoration: none;
+//         border-bottom: 1px solid #e6e6e6;
+//         &:hover {
+//           color:#cccccc;
+//           // background-color: #e6e6e6;
+//         }
+//         span.count {
+//           float:right;
+//           margin-right: 20px;
+//         }
+//       }
+//     }
+//   }
+// }
+
+.close_btn {
+  margin-right: 10px;
+  &:hover {
+    cursor:pointer;
+  }
+}
+
+img.photo{
+  width:40px;
+  height:40px;
+  background-color: #e6e6e6;
+  margin: 0 auto;
+}
+
+.newbutton{
+  float: right;
+  display: inline-block;
+  font-size: 14px;
+  color: #666666 !important;
+}
+
+#agentprofile{
+  p{
+    background-color: #808080;
+    color: #eeeeee;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+table{
+  color: #888888;
+  text-align: center;
+}
+thead td{
+  font-size:13px;
+}
+
+form.edit_agent {
+  input#photopath {
+    margin-bottom: 0px !important;
+  }  
+}
+
+.agent_form {
+  padding-left: 30px;
+  border: 1px solid lightgrey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .form-group {
+    margin-bottom: 0px;
+  }
+
+  .img_avatar {
+    width: 150px;
+    height: auto;
+    margin-bottom: 15px;
+    background-size: contain;
+  }
+}

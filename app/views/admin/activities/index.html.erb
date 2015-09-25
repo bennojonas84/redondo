@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Activities</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <% @activities.each do |activity| %>
+        <div class="activity">
+          <%= activity.owner.fullname if activity.owner %>
+          <%= render_activity activity %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

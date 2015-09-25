@@ -1,0 +1,32 @@
+<div class="section" id="whitepaper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="text-center">Retail Mapper Videos</h1>
+        <div class="video_gallery">
+          <%= image_tag 'play_button.png', class: 'main_play_button' %>
+          <%= link_to 'http://www.youtube.com/embed/YE7VzlLtp-4', class: 'fancybox iframe player_frame' do %>
+            <%= image_tag 'retailmapper.png', class: 'img-thumbnail video_item' %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+            <% 10.times do %>
+            <div class="col-md-4 ">
+              <div class="video_gallery">
+                <%= image_tag 'play_button.png', class: 'play_button' %>
+                <%= link_to 'http://www.youtube.com/embed/YE7VzlLtp-4', class: 'fancybox iframe player_frame' do %>
+                  <img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg" alt="Youtube Video" class="img-thumbnail video_item">
+                <% end %>
+              </div>
+              <div class="video_detail">
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+              </div>
+            </div>
+            <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

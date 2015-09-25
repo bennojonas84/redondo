@@ -1,0 +1,84 @@
+<% unless @count.empty? %>
+  <% if all_zipcode_report?(@count) %>
+    $(function () {
+      <!-- Build Pie Chart -->
+      $("#zipcode_report_chart").html('');
+      $("#zipcode_report_chart").highcharts({
+        chart: { type: 'pie' },
+        title: { text: 'Visits per Zipcode' },
+        tooltip: {
+          pointFormat: '{point.y} visits'
+        },
+        plotOptions: {
+          pie: {
+            cursor: 'pointer',
+            dataLabels: {
+             enabled: false,
+             distance: -30,
+             color: 'white',
+             formatter: function() {return this.point.name}
+            },
+            showInLegend: false
+          }
+        },
+        legend: { enabled: false},
+        series: [{
+          type: 'pie',
+          data: [
+            <% @count.each do |zipcode_count| %>
+              {
+                name: "<%= raw zipcode_count[0] %>",
+                y: <%= zipcode_count[1] %>
+              },
+            <% end %>
+          ]
+        }]
+      });
+    });
+  <% else %>
+    $(function() {
+      <!-- Build Column Chart -->
+      $("#zipcode_report_chart").html('here goes the column chart');
+      $("#zipcode_report_chart").highcharts({
+        chart: { type: 'column' },
+        title: {text: 'Visits for specific Zipcode over time'},
+        xAxis: {
+          title: {text: 'Months'},
+          type: 'datetime',
+          tickInterval: <%= 1.month * 1000 %>,
+          labels: false
+        },
+        yAxis: {
+          title: { text: 'Visit number' },
+          allowDecimal: false,
+          minTickInterval: 1
+        },
+        legend: { enabled: false },
+        tooltip: {
+          formatter: function() {
+            return Highcharts.dateFormat("%B %Y", this.x) + ': <b>' + this.y + '</b> visits'
+          }
+        },
+        // [["95014", [["2013", [["2013-09-01", 5]]]]
+        series: [
+          <% @count.each do |year_months_count| %>
+          {
+            pointInterval: <%= 1.month * 1000 %>,
+            pointStart: <%= Date.today.change(year: year_months_count[0].to_i).beginning_of_year.at_midnight.to_i * 1000 %>,
+            name: '<%= year_months_count[0] %>',
+            data: [
+              <% year_months_count[1].each do |month_count| %>
+                [Date.parse("<%= raw month_count[0] %>"), <%= month_count[1] %>],
+              <% end %>
+            ]
+          },
+          <% end %>
+        ]
+      });
+    })
+  <% end %>
+<% else %>
+  $(function () {
+    $("#zipcode_report_chart").html('<p class="alert" style="text-align:center;"><strong>Warning!</strong> There is no visits for this zipcode for the given period</p>');
+  });
+<% end %>

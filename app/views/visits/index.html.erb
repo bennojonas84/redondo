@@ -1,0 +1,73 @@
+<%provide(:title,'VIEW VISITS')%>
+<% content_for :addon_css do %>
+	<link rel="stylesheet" href="//js.arcgis.com/3.6/js/dojo/dijit/themes/claro/claro.css">
+	<link rel="stylesheet" href="//js.arcgis.com/3.6/js/esri/dijit/geoenrichment/themes/common/main.css">
+   <link rel="stylesheet" href="//js.arcgis.com/3.6/js/esri/css/esri.css">
+<% end %>
+<% content_for :addon_js do %>
+	<script src="//js.arcgis.com/3.6/"></script>
+<% end %>
+
+<div class="container" id="visits_page">
+	<!-- Breadcrumb -->
+  <div class="row">
+    <div class="col-md-12 breadplus">
+      <ol class="breadcrumb">
+        <li><%= link_to "Visits", visits_path() %></li>
+      </ol>
+    </div>
+  </div>
+	<div class="row">
+		<div class="col-md-3" id="side_menu">
+			<%= render partial: 'layouts/side_menu', locals: {companyuser: @companyuser, agents: @agents, assets: @assets, visits: @visits} %>
+		</div>
+		<div class="col-md-9 visits_content">
+			<header class="visits-table-header">
+				<div class="row">
+					<div class="col-xs-7 title">
+						<h3>
+							VIEW VISITS
+							<small>&nbsp&nbsp&nbspTotal: <%= @filtervisits.count %></small>
+						</h3>
+	<!-- 				</div>
+					<div class="col-md-6" id="search-form"> -->
+						
+					</div>
+					<div class="col-xs-4">
+						<%= form_tag visits_path, :method=>'get', :id=>'visits_search', :class=>'form-horizontal', remote: true do %>
+							<div class="form-group">
+								<label class="sr-only">Search:</label>
+								<%= text_field_tag :search, params[:search], placeholder: 'search', class: 'form-control' %>
+							</div>
+						<% end %>
+					</div>
+				</div>
+			</header>
+
+			<nav id="tabs">
+				<ul class="nav nav-tabs" id="visitsTab">
+					<li class="active"><a href="#visits_list" data-toggle="tab">Visits</a></li>
+					<li><a href="#visits_map" data-toggle="tab">Map</a></li>
+				</ul>
+			</nav>
+
+			<div class="tab-content">
+				<div class="tab-pane active" id="visits_list">
+					<div id="loading"><%= image_tag("loading.gif") %></div>
+					<div id="visits_list"><%= render 'visits' %></div>
+				</div>
+				<div class="tab-pane" id="visits_map">
+					<div class="row" style="position:relative;" >
+						<div class="col-md-12" id="map_panel">
+							<div id="map" style="direction:ltr;" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'"></div>
+							<div id="search_result" class="alert alert-success span8">
+								<h5></h5>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

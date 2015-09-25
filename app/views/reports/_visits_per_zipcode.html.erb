@@ -1,0 +1,24 @@
+<table class="table table-bordered table-hover">
+  <tr>
+    <td>Zipcode</td><td colspan="<%= @count[:visits_hash].length %>" class="centered"><%= @count[:zipcode] %></td>
+  </tr>
+  <tr>
+    <td>Year</td><td colspan="<%= @count[:visits_hash].length %>" class="centered"><%= @count[:year] %></td>
+  </tr>
+  <tr>
+    <td><%= @count[:period].capitalize %></td>
+    <% @count[:visits_hash].each_pair do |period, value| %>
+      <% if @count[:period] == "week" %>
+        <td><%= human_readable_week(period, @count[:year]) %></td>
+      <% else %>
+        <td><%= period %></td>
+      <% end %>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Visits</td>
+    <% @count[:visits_hash].each_pair do |period, value| %>
+    <td><%= value %></td>
+    <% end %>
+  </tr>
+</table>

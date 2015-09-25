@@ -1,0 +1,7 @@
+<p>Welcome <%= @email %> to Retail Mapper!</p>
+
+<p>Congratulations your account has been activated. Just click below to confirm your account and set-up your password.</p>
+<p><%= link_to 'CONFIRM ACCOUNT', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></p>
+<p>Soon you'll be able to visualize point of sale material in real world settings on the fly.</p>
+<p>Thanks,</p>
+<p>Team SkuRun</p>

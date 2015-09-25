@@ -1,0 +1,110 @@
+<% provide(:title, 'VIEW COMPANY DETAIL') %>
+
+<div class='container'>
+  <div class="row">
+    <div class='col-md-12 breadplus'>
+      <ol class='breadcrumb'>
+        <li><%= link_to "Companies", admin_companies_path() %></li>
+        <li class="active"><%= @company.name %></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <nav id="tabs">
+        <ul class='nav nav-tabs' id='companyTabs'>
+          <li class="active"><a href="#company_detail" data-toggle="tab">Details</a></li>
+          <li><a href="#company_uber_admin" data-toggle='tab'>Uber Admin</a></li>
+        </ul>
+      </nav>
+  
+      <div class="tab-content">
+        <div class="tab-pane active" id="company_detail">
+          <%= form_for([:admin, @company], html: {id: 'admin_form', class: 'form-horizontal'}) do |f| %>
+
+            <div class="form-group">
+              <%= f.label :name, "Name", class: "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <%= f.text_field :name, :class=>'input-box', :required=>true %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :logo, "Logo", class: "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <%= f.file_field :logo, :size=>'19',:onchange=>"selectlogoFile(this)",:style=>'display:none;' %>
+                <%= text_field_tag :logopath, @company.logo.path,:readonly=>:true, :style=>'width:200px;height: 30px;' %>
+                <%= link_to( "Browse...", '#', onclick: "logoBrowse()")%>
+              </div>
+            </div>
+            <div class="form-group">
+            </div>
+            
+            <div class="form-group">
+              <%= f.label :WEBSITE, class: "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <%= f.text_field :url, :class=>'input-box'%>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :EMAIL, class: "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <%= f.text_field :email, :class=>'input-box', :required=>true,:pattern => '[^@]+@[^@]+\.[a-zA-Z]{2,6}' %>
+              </div>
+            </div>
+            <div class="form-group">
+              <%= f.label :PASSWORD, class: "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <%= f.password_field :password, :class=>'input-box', :required=>true%>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <div class="col-sm-2">&nbsp;</div>
+              <div class="col-sm-10">
+                <%= f.submit "Update",:class=>"btn btn-success" %>
+                <% unless @company.new_record? %>
+                  <%= link_to "Excel Report", visits_report_path(id: @company.id, format: :xls), class: "btn btn-info visits_report"  %>
+                  <%= link_to "Delete", admin_company_path(@company), :method=>:delete, class: "btn btn-danger" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="tab-pane" id="company_uber_admin">
+          <div class="row">
+            <div class="col-md-12" id="explain">
+              <p>
+                Assign an UberAdmin to this company Or Change the Current One.<br>
+                Drag and Drop an UberAdmin from the left column to the right one.
+              </p>
+              <div id="assignement_message" class="alert alert-success"></div>
+            </div>
+            <!-- TODO : Implement drag and drop between the following columns -->
+            <!-- If there is already an assigned uber-admin, dropping another in the column will replace him -->
+            <div class="col-md-6" id="all_uber_admins">
+              <table id="uber_admins" class="table table-striped">
+                <thead>
+                  <tr><td><h5>Uber Admins</h5></td></tr>
+                </thead>
+                <tbody>
+                  <% @uber_admins.each do |uber_admin| %>
+                    <tr>
+                      <td class="draggable" data-admin_id="<%= uber_admin.id %>" data-company_id="<%= @company.id %>"><%= uber_admin.email %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6" id="assigned_uber_admin">
+              <h5>Assigned Uber Admin</h5>
+              <div id="droppable">
+                <%= @assigned_uber_admin.email if @assigned_uber_admin %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

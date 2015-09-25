@@ -1,0 +1,218 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require mb/bootstrap
+ *= require mb/modern-business
+ *= require jquery.ui.all
+ *= require jquery.thumbnailScroller
+ *= require font-awesome
+ *= require fancybox
+ *= require_tree .
+ */
+
+.id{
+	display: none;
+}
+
+.fix-table{
+	table-layout: fixed;
+	width:100%;
+}
+
+.fix-table th {
+	text-align: center;
+}
+
+.fix-table td{
+	word-wrap: break-word;
+	height: 53px;
+}
+
+.input-box{
+	width: 300px;
+}
+
+.input-div {
+	/*margin-left: 20px;*/
+}
+
+.inline {
+	display: inline;
+}
+.error {
+	color: #c09853 !important;
+	font-weight: normal !important;
+	font-size: 12px; 
+}
+
+.nodisplay{
+	display: none !important;
+}
+
+.header_img {
+	padding: 5px;
+	width: 130px;
+	height: 50px;
+	background-size: contain;
+}
+
+.main_content {
+	min-height: 100%;
+}
+
+.btn{
+	/*color: #666666 !important;*/
+	margin-top: 5px;
+	margin-left: 10px;
+	font-size: 13px !important;
+}
+input[type="text"]{
+	/*height: 30px !important;*/
+}
+input[type=file] {
+	-webkit-appearance: textfield;
+	width: 200px !important;
+	position: relative;
+	-webkit-box-sizing: border-box;
+}
+input[type=file]::-webkit-file-upload-button {
+	width: 0;
+	padding: 0;
+	margin: 0;
+	-webkit-appearance: none;
+	border: none;
+}
+/* "x::-webkit-file-upload-button" forces the rules to only apply to browsers that support this pseudo-element */
+x::-webkit-file-upload-button, input[type=file]:after {
+	content: 'Browse...';
+	display: inline-block;
+	left: 100%;
+	top: -11px;
+	margin-left:11px;
+	position: relative;
+	-webkit-appearance: button;
+	padding: 0px 8px 0 5px;
+}
+a:hover{
+	text-decoration: none !important;
+}
+.default-link{
+	color: #888888 !important;
+	font-weight: bold;
+	text-decoration: none !important;
+}
+.default-link:hover{
+  text-decoration: underline !important;
+  background-color: white !important;
+}
+.default-sort-link{
+	color: #888888 !important;
+	text-decoration: none !important;
+	display:block;
+}
+.default-sort-link:hover{
+  text-decoration: none !important;
+  background-color: transparent !important;
+}
+.highlight{
+	background-color: whitesmoke !important;
+}
+table thead td{
+	height: 30px !important;
+}
+.visitdetail {
+	padding: 20px;
+	font-size: 13px;
+	line-height: 20px;
+}
+.asc{
+	background: url(asc.gif) no-repeat center right;
+}
+.desc{
+	/*background: url(desc.gif) no-repeat center right;*/
+}
+
+.pagenumLabel{
+	display:inline;
+}
+
+.pageDiv{
+	margin-top: 20px;
+	text-align: center;
+}
+
+.highlight-nav{
+	background-image: -moz-linear-gradient(center top , #FF9966, #FFaa44) !important;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FF9966), to(#FFaa44)) !important;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF9966', endColorstr='#FFaa44',GradientType=0) !important;
+
+}
+.highlight-nav .brand{
+	color: white !important;
+}
+.highlight-nav li{
+	color: white !important;
+}
+.pagination{
+	text-align: center;
+}
+#loading{
+	text-align:center;
+	display: none;
+}
+
+
+
+@media (max-width: 480px) {
+}
+
+@media (max-width: 767px) {
+	.navbar-ex1-collapse li {
+		text-align: center;
+		font-size: 21px;
+	}
+	.navbar-ex1-collapse li a {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+  .navbar-form, .navbar-form .input-group {
+    width: 195px !important;
+  }
+  .navbar-form input[type=text] {
+  	width: 140px !important;
+  }
+  .navbar-form span {
+  	width: 40px !important;
+  }
+	.navbar-form {
+		float: right !important;
+		margin-top: -4px !important;
+		margin-right: 5px !important;
+	}
+	#search_form_nav form .input-group {
+		width: 100%;
+		padding: 10px 0px;
+	}
+}
+
+@media only screen and (max-width: 992px) and (min-width: 769px) {
+	.navbar-ex1-collapse li a {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+  .navbar-form {
+    width: 195px !important;
+  	margin-right: 0px !important;
+  }
+  .navbar-form input[type=text] {
+  	width: 140px !important;
+  }
+}

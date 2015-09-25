@@ -1,0 +1,21 @@
+<%provide(:title,'VIEW VISIT DETAIL')%>
+
+  <div class="container">
+    <div class="row" id="missing_visit">
+      <div class="col-md-3" id="side_menu">
+        <%= render partial: 'layouts/side_menu', locals: {companyuser: @companyuser, agents: @agents, assets: @assets, visits: @visits} %>
+      </div>
+      <div class="col-md-9">
+        <!--<div style="color:#888888;font-weight:bold;font-size:16px;display:inline-block;width:100%;margin-bottom:10px;">-->
+          <!--<span style="display:inline-block;margin-left: 20px;">VIEW VISITS</span>-->
+        <!--</div>-->
+        <h3>VIEW VISITS</h3>
+        <hr/>
+
+        <div class="alert alert-error">
+          <h2>The visit you were looking for has moved.</h2>
+          <p>Please click visits on the left to find the visit you were looking for.</p>
+        </div>
+      </div>
+    </div>
+  </div>

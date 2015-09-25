@@ -1,0 +1,399 @@
+<% provide(:title, "REPORT FOR #{@report[:company].name.upcase}") %>
+<% content_for :addon_js do %>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+<% end %>
+<div class="container">
+  <!-- Breadcrumb -->
+  <div class="row">
+    <div class="col-md-12 breadplus">
+      <ol class='breadcrumb'>
+        <li class="active">REPORT FOR <%= @report[:company].name %></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    
+    <div class="col-md-3" id='side_menu'>
+      <%= render partial: 'layouts/side_menu', locals: {companyuser: @companyuser, agents: @agents, assets: @assets, visits: @visits} %> 
+    </div>
+
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-8">
+          <h2 id="report-title">REPORT FOR <%= @report[:company].name %></h2>
+        </div>
+        <div class="col-md-4">
+          <%= link_to "Get XLS", reports_path(format: :xls, id: params[:id]), class: 'btn btn-default pull-right' %>
+        </div>
+      </div>
+
+      <hr>
+      <% if !@visits.empty? %>
+      <section id="period_visits_report">
+        <h2 class="report">Visits Per Time Period</h2>
+        <article id="today-visits">
+          <header class="report">Today Visits Count</header>
+          <%= form_tag today_visits_count_reports_path, remote: true, class: "form-inline", method: :post do |f| -%>
+            <label class="control-label">Pick a day :</label>
+            <%= date_field_tag :date, Date.today, placeholder: "year/month/day" %>
+            <%= hidden_field_tag :company_id, @report[:company].id %>
+            <button type="submit" class="btn btn-mini">compute</button>
+          <% end -%>
+          <p>Number of visits : <span id="visits_per_day_number"><%= @report[:today_visits] %></span></p>
+        </article>
+
+        <article id="visits-per-week">
+          <header class="report">Visits per Week</header>
+
+          <%= form_tag visits_per_period_reports_path, remote: true, class: 'form-inline', method: :post do |f| %>
+            <%= hidden_field_tag :company_id, @report[:company].id %>
+            <%= hidden_field_tag :period, "week" %>
+            <label class="control-label">Start Date:</label>
+            <%= date_field_tag :start_date,12.months.ago, class:'datepicker' %>
+            <label class="control-label">End Date:</label>
+            <%= date_field_tag :end_date,Time.now.utc, class:'datepicker' %>
+            <button type="submit" class="btn btn-mini">compute</button>
+          <% end %>
+
+          <div id="visits_per_week_chartdiv"></div>
+        </article>
+
+        <article id="visits-per-month">
+          <header class="report">Visits per Month</header>
+
+          <%= form_tag visits_per_period_reports_path, remote: true, class: 'form-inline', method: :post do |f| %>
+            <%= hidden_field_tag :company_id, @report[:company].id %>
+            <%= hidden_field_tag :period, "month" %>
+            <label class="control-label">Start Date:</label>
+            <%= date_field_tag :start_date,12.months.ago, class:'datepicker' %>
+            <label class="control-label">End Date:</label>
+            <%= date_field_tag :end_date,Time.now.utc, class:'datepicker' %>
+            <button type="submit" class="btn btn-mini">compute</button>
+          <% end %>
+
+          <div id="visits_per_month_chart_div" style="width:100%; height:400px;"></div> 
+        </article>
+      </section>
+      
+      <hr>
+
+      <section id="zipcode_visits_report">
+        <h2>Visits Per Zipcode</h2>
+        <%= form_tag visits_per_zipcode_reports_path, remote: true, class: "form-inline", method: :post do |f| %>
+          <%= hidden_field_tag :company_id, @report[:company].id %>
+            <label class="control-label">Zipcode :</label>
+              <%= select_tag :zipcode, options_from_collection_for_select(Visit.all.select(&:zipcode).uniq.sort, "zipcode", "zipcode"), prompt: 'All', class: 'input-small' %>
+            <label class="control-label">Start Date:</label>
+              <%= date_field_tag :start_date,12.months.ago, class:'datepicker' %>
+            <label class="control-label">End Date:</label>
+              <%= date_field_tag :end_date,Time.now.utc, class:'datepicker' %>
+              <button type="submit" class="btn btn-mini">compute</button>
+        <% end %>
+
+        <div id="zipcode_report_chart">
+        </div>
+      </section>
+      <hr>
+      <section id="enthusiasm_quality_report" class="row">
+        <h2>Visits per Rating</h2>
+        <article id="enthusiasm_report" class="col-md-4">
+          <div id="visits_per_enthusiam_chart"></div>
+        </article>
+
+        <article id="quality_report" class="col-md-4 offset1">
+          <div id="visits_per_quality_chart"></div>
+        </article>
+      </section>
+      <hr>
+      <section id="active_agents_report">
+        <h2>Most Active Agents</h2>
+        
+        <%= form_tag most_active_agents_reports_path, remote: true, class: "form-inline", method: :post do |f| %>
+          <%= hidden_field_tag :company_id, @report[:company].id %>
+            <label class="control-label">Start Date:</label>
+              <%= date_field_tag :start_date,12.months.ago, class:'datepicker' %>
+            <label class="control-label">End Date:</label>
+              <%= date_field_tag :end_date,Time.now.utc, class: 'datepicker' %>
+              <button type='submit' class='btn btn-mini'>Compute</button>
+        <% end %>
+
+        <article>
+          <div id="most_active_agents_chart" class="col-md-6 offset2"></div>
+        </article>
+      </section>
+      <% else %>
+      <div class="alert alert-error">
+        <h2>No reports can be generated at this time. Please check back again when a visit has been published. Thanks.</h2>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+  $("#visits_per_month_chart_div").highcharts({
+    chart: { type: 'column' },
+    title: { text: 'Visits per month' },
+    xAxis: { 
+      title: { text: 'Months'},
+      type:'datetime',
+      tickInterval: <%= 1.month * 1000 %>,
+      labels: false
+    },
+    yAxis: { 
+      title: { text: 'Visit number' },
+      allowDecimal: false,
+      minTickInterval: 1 
+    },
+    tooltip: {
+      formatter: function() {
+        return Highcharts.dateFormat("%B %Y", this.x) + ': <b>' + this.y + '</b> visits'
+      }
+    },
+    legend: { enabled: false },
+    series: [
+    <% @report[:visits_per_month].each do |year_months_count| %>
+      {
+        pointInterval: <%= 1.month * 1000 %>,
+        pointStart: <%= Date.today.change(year: year_months_count[0]).beginning_of_year.at_midnight.to_i * 1000 %>,
+        name: '<%= year_months_count[0] %>',
+        data: [
+          <% year_months_count[1].each do |month_count| %>
+            [Date.parse("<%= raw month_count[0] %>"), <%= month_count[1] %>],
+          <% end %>
+        ]
+      },
+    <% end %>
+    ]
+  });
+
+  Highcharts.dateFormats = {
+    W: function(timestamp) {
+      var date = new Date(timestamp),
+          day = date.getUTCDay() == 0 ? 7 : date.getUTCDay(),
+          dayNumber;
+      date.setDate(date.getUTCDate() + 4 - day);
+      dayNumber = Math.floor((date.getTime() - new Date(date.getUTCFullYear(), 0, 1, -6)) / 86400000);
+      return 1 + Math.floor(dayNumber / 7);
+    }
+  }
+
+  $("#visits_per_week_chartdiv").highcharts({
+    chart: {type: 'column'},
+    title: {text: 'Visits per Week'},
+    xAxis: { 
+      title: {text: 'Weeks'},
+      type:'datetime',
+      tickInterval: <%= 3.week * 1000 %>,
+      labels: false
+    },
+    yAxis: { 
+      title: {text: 'Visit number'},
+      allowDecimal: false,
+      minTickInterval: 1
+    },
+    legend: { enabled: false },
+    tooltip: {
+      formatter: function() {
+        return "Week from " + Highcharts.dateFormat("%A, %B %d %Y", this.x) + ': <b>' + this.y + '</b> visits';
+      }
+    },
+    series: [
+    <% @report[:visits_per_week].each do |year_weeks_count| %>
+      {
+        pointInterval: <%= 1.day * 7 * 1000 %>,
+        pointStart: <%= Date.today.change(year: year_weeks_count[0]).beginning_of_year.at_midnight.to_i * 1000 %>,
+        name: '<%= year_weeks_count[0] %>',
+        data: [
+          <% year_weeks_count[1].each do |week_count| %>
+            [Date.parse("<%= raw human_readable_week_start(week_count[0], year_weeks_count[0]) %>"), <%= week_count[1].size %>],
+          <% end %>
+        ]
+      },
+    <% end %>
+    ]
+  });
+
+  $("#visits_per_enthusiam_chart").highcharts({
+    chart: { type: 'pie' },
+    title: { text: 'Visits per Enthusiasm' },
+    tooltip: {
+      pointFormat: '{point.y} visits'
+    },
+    plotOptions : {
+      pie: {
+        cursor: 'pointer',
+        dataLabels: { 
+          enabled: true,
+          distance: -15,
+          formatter: function() {return this.point.name},
+          color: 'white'
+        },
+      }
+    },
+    legend: { 
+      enabled: false ,
+    },
+    series: [{
+      type: 'pie',
+      data: [
+        <% @report[:visits_per_enthusiasm].each do |rating_couple| %>
+          {
+            name: "R<%= raw rating_couple[0] %>",
+            y: <%= rating_couple[1] %>
+          },
+        <% end %>
+      ]
+    }],
+  });
+
+  $("#visits_per_quality_chart").highcharts({
+    chart: { type: 'pie' },
+    title: { text: 'Visits per Quality' },
+    tooltip: {
+      pointFormat: '{point.y} visits'
+    },
+    plotOptions : {
+      pie: {
+        cursor: 'pointer',
+        dataLabels: { 
+          enabled: true,
+          distance: -20,
+          color: 'white',
+          formatter: function() {return this.point.name}
+        },
+        showInLegend: false
+      }
+    },
+    legend: { 
+      enabled: false ,
+    },
+    series: [{
+      type: 'pie',
+      data: [
+        <% @report[:visits_per_quality].each do |rating_couple| %>
+          {
+            name: "R<%= raw rating_couple[0] %>",
+            y: <%= rating_couple[1] %>
+          },
+        <% end %>
+      ]
+    }]
+  });
+
+  $("#most_active_agents_chart").highcharts({
+    chart: { type: 'pie', marginRight: 170 },
+    title: { text: 'Most Active Agents' },
+    tooltip: {
+      pointFormat: '{point.y} visits'
+    },
+    plotOptions: {
+      pie: {
+        cursor: 'pointer',
+        dataLabels: { enabled: false },
+        showInLegend: true
+      }
+    },
+    legend: { 
+      enabled: true,
+      align: 'right',
+      verticalAlign: 'top',
+      layout: 'vertical',
+      x: 10,
+      y: 50
+    },
+    series: [{
+      type: 'pie',
+      data: [
+        <% @report[:most_active_agents].each do |agent_count| %>
+          ["<%= raw agent_count[0] %>", <%= agent_count[1] %>],
+        <% end %>
+      ]
+    }]
+  });
+});
+</script>
+
+<% if @visits.any? %>
+  <% if all_zipcode_report?(@report[:visits_per_zipcode]) %>
+  <!-- Build Pie Chart -->
+  <script type="text/javascript">
+  $(function() {
+    $("#zipcode_report_chart").highcharts({
+      chart: { type: 'pie' },
+      title: { text: 'Visits per Zipcode' },
+      tooltip: {
+        pointFormat: '{point.y} visits'
+      },
+      plotOptions: {
+        pie: {
+          cursor: 'pointer',
+          dataLabels: {
+           enabled: false,
+           distance: -30,
+           color: 'white',
+           formatter: function() {return this.point.name}
+         },
+         showInLegend: false
+       }
+     },
+     legend: { enabled: false},
+     series: [{
+      type: 'pie',
+      data: [
+      <% @report[:visits_per_zipcode].each do |zipcode_count| %>
+      {
+        name: "<%= raw zipcode_count[0] %>",
+        y: <%= zipcode_count[1] %>
+      },
+      <% end %>
+      ]
+    }]
+  });
+  });
+  </script>
+  <% else %>
+  <!-- Build Column Chart -->
+  <script type="text/javascript">
+  $(function () {
+    $("#zipcode_report_chart").highcharts({
+      chart: { type: 'column' },
+      title: {text: 'Visits for specific Zipcode over time'},
+      xAxis: {
+        title: {text: 'Months'},
+        type: 'datetime',
+        tickInterval: <%= 1.month * 1000 %>,
+        labels: false
+      },
+      yAxis: {
+        title: { text: 'Visit number' },
+        allowDecimal: false
+        minTickInterval: 1
+      },
+      legend: { enabled: false },
+      tooltip: {
+        formatter: function() {
+          return "Month from " + Highcharts.dateFormat("%A, %B %d %Y", this.x) + ': <b>' + this.y + '</b> visits';
+        }
+      },
+      series: [
+      <% @report[:visits_per_zipcode].each do |year_months_count| %>
+      {
+        pointInterval: <%= 1.month * 1000 %>,
+        pointStart: <%= Date.today.change(year: year_months_count[0].to_i).beginning_of_year.at_midnight.to_i * 1000 %>,
+        name: '<%= year_months_count[0] %>',
+        data: [
+        <% year_months_count[1].each do |month_count| %>
+        [Date.parse("<%= raw month_count[0] %>"), <%= month_count[1] %>],
+        <% end %>
+        ]
+      },
+      <% end %>
+      ]
+    });
+  });
+  </script>
+  <% end %>
+<% end %>

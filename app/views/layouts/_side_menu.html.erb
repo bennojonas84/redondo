@@ -1,0 +1,48 @@
+<div id="company_info">
+    <div id="companylogo">
+        <%= image_tag companyuser.logo.url, width: '200', height: '200', class: 'img-thumbnail' %>
+    </div>
+    <div id="tab">
+      <ul>
+        <li class="first"><%= companyuser.name%></li>
+        <li>
+          <% if can? :read, Agent %>
+            <%= link_to agents_path(:id=>companyuser.id),:class=>"tab" do %>
+              <span class="menu">AGENTS<span class="count"><%=agents.count%></span></span>
+            <% end %>
+          <% else %>
+            <span class="menu">AGENTS<span class="count"><%=agents.count%></span></span>
+          <% end %>
+        </li>
+        <li>
+          <% if can? :read, Asset %>
+          <%= link_to assets_path(:id=>companyuser.id),:class=>"tab" do %>
+            <span class="menu">ASSETS<span class="count"><%=assets.count%></span></span>
+          <% end %>
+          <% else %>
+            <span class="menu">ASSETS<span class="count"><%=assets.count%></span></span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to visits_path(:id=>companyuser.id),:class=>"tab" do %>
+            <span class="menu">VISITS<span class="count"><%=visits.count%></span></span>
+          <% end %>
+        </li>
+        <li>
+          <% if can? :manage, Report %>
+          <%= link_to reports_path(id: companyuser.id), class: 'tab' do %>
+            <span class="menu">REPORTS</span>
+          <% end %>
+          <% else %>
+            <span class="menu">REPORTS</span>
+          <% end %>
+        </li>
+        <% if admin_signed_in? %>
+        <li id="rails_log_link" style="display:none;">
+          <%= link_to "Rails Log", rails_log_path %>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+    <div style="clear: both;"></div>
+</div>

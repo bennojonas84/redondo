@@ -1,0 +1,56 @@
+<div class="section" id="contact_page">
+  <div class="container">
+    <div class="row">
+      <div id="contact_caption" class="col-xs-offset-1 col-sm-offset-1 col-sm-10 col-xs-10">
+        <p style="text-transform:uppercase;" class="text-center">WE ARE LOOKING FORWARD TO HEAR FROM YOU</p>
+      </div>
+    </div>
+    <div class="row">
+      <div id="contact_form" class="col-xs-offset-1 col-sm-offset-1 col-sm-5 col-xs-10">
+        <%= form_for(:contact, :url => '#', class: 'form-horizontal') do |f| %>
+            <div class="col-sm-offset-1 col-sm-10">
+              <div class="input-div">
+                <%= f.label :full_name %><br />
+                <%= f.text_field :full_name, :autofocus => true, :class=>'form-control'%>
+              </div>
+
+              <div class="input-div">
+                <%= f.label :email %><br />
+                <%= f.email_field :email, :autofocus => true, :class=>'form-control'%>
+              </div>
+
+              <div class="input-div">
+                <%= f.label :subject %><br />
+                <%= f.text_field :subject, :autofocus => true, :class=>'form-control'%>
+              </div>
+
+              <div class="input-div">
+                <%= f.label :message %><br />
+                <%= f.text_area :message, :class=>'form-control', :rows => 6 %>
+              </div>
+
+              <div class="input-div">
+                <%= f.submit 'Send',:class=>'btn btn-default pull-right' %>
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <div class="col-sm-5 col-xs-offset-1 col-xs-10" id="contact_detail">
+        <div class="row">
+          <div class="col-xs-offset-1 col-xs-10">
+            <h4 id="contact_helper">
+              You can contact us using the form to your left, alternatively you can use the links before:
+            </h4>
+            <div class="contact_address">
+                <a href="tel:00000000000"><h3><i class="fa fa-phone"></i> +00(0) 0000 000000</h3></a>
+                <a href="mailto:admin@skurun.com"><h3><i class="fa fa-envelope-o"></i> admin@skurun.com</h3></a>
+                <a href="skype:admin.skurun?call"><h3><i class="fa fa-skype"></i> admin.skurun</h3></a>
+                <a href="http://twitter.com/SkuRun" target="_blank"><h3><i class="fa fa-twitter"></i> @SkuRun</h3></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,480 @@
+<%provide(:title,'VIEW VISIT DETAIL')%>
+<% content_for :addon_css do %>
+  <link rel="stylesheet" href="//js.arcgis.com/3.6/js/dojo/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="//js.arcgis.com/3.6/js/esri/dijit/geoenrichment/themes/common/main.css">
+  <link rel="stylesheet" href="//js.arcgis.com/3.6/js/esri/css/esri.css">
+<% end %>
+<% content_for :addon_js do %>
+  <script>
+    var dojoConfig = { 
+      parseOnLoad: false,
+      packages: [{
+        "name": "extras",
+        "location": "/assets/extras"
+      }]
+    };
+  </script>
+	<script src="//js.arcgis.com/3.6/"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+<% end %>
+
+<div class="container">
+  <!-- Breadcrumb -->
+  <div class="row">
+    <div class="col-md-12 breadplus">
+      <ol class="breadcrumb">
+        <li><%= link_to "Visits", visits_path() %></li>
+        <li class="active">View <%= @visit.agent.fullname %> Visits</li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    <!-- Side Menus -->
+    <div class="col-md-3" id="side_menu">
+      <%= render partial: 'layouts/side_menu', locals: {companyuser: @companyuser, agents: @agents, assets: @assets, visits: @visits} %>      
+    </div>
+    <!-- Main part -->
+    <section class="col-md-9" id="visitdetails">
+      <header>
+        <div class="row">
+          <div class="col-md-12">
+            <h3 class="inline"><%= @visit.title %></h3>
+            <p id="star" data-score="<%= @visit.avg_rating %>"></p>
+            <p>
+              <%= @visit.address %>,
+              <%= @visit.phone_number %>
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <nav id="tabs">
+        <ul class="nav nav-tabs" id="visitsTab">
+          <li class="active"><a href="#visit_details" data-toggle="tab">Details</a></li>
+          <li><a href="#visit_assets" data-toggle="tab">Assets</a></li>
+          <li><a href="#visit_tags" data-toggle="tab">Tags</a></li>
+          <li><a href="#visit_map" data-toggle="tab">Map</a></li>
+          <li><a href="#visit_export" data-toggle="tab">Export</a></li>
+        </ul>
+      </nav>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="visit_details">
+          <div class="row mainpic-intels" id="mainpic-intels">
+            <div id="mainpic" class="col-md-6">
+              <%= image_tag downloadable_url(@visit.images.first) %>
+            </div>
+            <div id="visit-intel" class="col-md-6">
+              <table>
+                <tr>
+                  <td>Website:</td>
+                  <td><a href="<%= short_url(@visit.url) %>"><%= short_url(@visit.url) %></a></td>
+                </tr>
+                <tr>
+                  <td>Retailer ID:</td>
+                  <td><%= @visit.retailer_id %></td>
+                </tr>
+                <tr>
+                  <td>Sales Rep:</td>
+                  <td><%= @visit.agent_name %></td>
+                </tr>
+                <tr>
+                  <td>Rep ID:</td>
+                  <td><%= @visit.sales_rep_id %></td>
+                </tr>
+                <tr>
+                  <td>Date:</td>
+                  <td><%= formatted_time(@visit.creation_time) %></td>
+                </tr>
+                <tr>
+                  <td>Region ID:</td>
+                  <td><%= @visit.region_id %></td>
+                </tr>
+                <tr>
+                  <td># of Images:</td>
+                  <td><%= @visit.image_count %></td>
+                </tr>
+                <tr>
+                  <td>Enthusiasm:</td>
+                  <td><%= formatted_rating(@visit.visit_enthusiasm) %></td>
+                </tr>
+                <tr>
+                  <td>Quality:</td>
+                  <td><%= formatted_rating(@visit.visit_quality) %></td>
+                </tr>
+                <tr>
+                  <td>% ROI Lift:</td>
+                  <td><%= number_to_percentage(@visit.assets_percent_lift_sum, precision: 0) %></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="row" id="visit_detail_body">
+            <div class="col-md-12" id="gallery">
+              <div id="thumbs_scroll" class="jThumbnailScroller">
+                <div class="jTscrollerContainer">
+                    <div class="jTscroller">
+                      <% @visit.images.each do |image| %>
+                        <%= visit_image_gallery_link_no_tags(image) %>
+                      <% end %>
+                    </div>
+                </div>
+                <a href="#" class="jTscrollerPrevButton"></a>
+                <a href="#" class="jTscrollerNextButton"></a>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="detail_comment">
+            <div class="col-md-12">
+              <blockquote>
+                <p>
+                  <% if @visit.comment.blank? %>
+                    No comments.
+                  <% else %>
+                    <strong>Comments: </strong>
+                    <%= @visit.comment %>
+                  <% end %>
+                </p>
+              </blockquote>
+            </div>
+          </div>
+          <hr/>
+          <div class="row" id="visit_detail_body">
+            <div class="col-md-4">
+              <div id="local_demographics_chart"></div>
+            </div>
+            <div class="col-md-8" id="gallery-esridatas">
+              <div id="esridatas">
+                <div id="pop_hh_hi" style="display:none;">
+                  <table id="keyfacts" class="table table-bordered">
+                    <thead>
+                      <tr class="silver">
+                        <td colspan="2" class="centered">Key US Facts by Zipcode</td>
+                      </tr>
+                    </thead>
+                      <tr class="gray">
+                      <td>Total Population : </td><td id="total_pop" class="green"></td>
+                    </tr>
+                    <tr class="dark">
+                      <td>Total Households : </td><td id="total_hh" class="blue"></td>
+                    </tr>
+                    <tr class="gray">
+                      <td>Median Household Income : </td><td id="total_hhi" class="green"></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="right-align"><small>esri.com</small></td>
+                    </tr>
+                  </table>
+                </div>
+                <hr>
+                <div id="retail_spending_table" style="display:none;">
+                  <table id="spending" class="table table-bordered">
+                    <thead>
+                      <tr class="silver"><td colspan="2" class="centered">Annual Household Retail Spend by Zipcode</td></tr>
+                    </thead>
+                    <tr class="gray">
+                      <td >Retail Goods : </td><td id="retail-goods-avg" class="green"></td>
+                    </tr>
+                    <tr class="dark">
+                      <td>Percent Above or Below U.S Average : </td><td id="RetailSpending_pct_USAvg" class="blue"></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="right-align"><small>esri.com</small></td>
+                    </tr>
+                  </table>
+                  <span class="span2 offset4"></span>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="visit_assets">
+          <% if @visit.assets_images_combination.present? %>
+            <% @visit.assets_images_combination.each_pair do |asset, images_array| %>
+              <div class="row">
+                <div class="col-md-3">
+                  <%= image_tag asset.image.url(:medium), class: 'img-thumbnail thumb_export' %>
+                  <p class="text-center"><%= asset.description %></p>
+                </div>
+                <div class="col-md-9">
+                  <h4>
+                    <a href="#" class="associated_images_link" data-asset-id="<%= asset.id %>">
+                      <%= images_array.size %> image<% images_array.size > 1 ? 's' : '' %> associated
+                    </a>
+                  </h4>
+                  <% if images_array.present? %>
+                      <div id="thumbs_scroll_<%= asset.id %>" class="jThumbnailScroller" style="visibility: hidden;">
+                        <div class="jTscrollerContainer">
+                          <div class="jTscroller">
+                            <% images_array.each.each do |image| %>
+                                <%= visit_image_gallery_link_no_tags(image) %>
+                            <% end %>
+                          </div>
+                        </div>
+                        <a href="#" class="jTscrollerPrevButton"></a>
+                        <a href="#" class="jTscrollerNextButton"></a>
+                      </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p>No Assets/Images Associations for this Visit</p>
+          <% end %>
+        </div>
+        <div class="tab-pane" id="visit_tags">
+          <div class="row">
+            <div class="col-md-12">
+              <% if @visit.images_with_tags.any? %>
+              <div class="visit-gallery">
+              <ul class="list-inline">
+                <% @visit.images_with_tags.each_with_index do |asset, index| %>
+                  <li data-imageurl="<%= downloadable_url(asset) %>" class="gallery-item">
+                    <%= image_gallery_link(asset) %>
+                    <br>
+                    <p class="img-index text-center"><%= image_tags(asset) %></p>
+                  </li>
+                <% end %>
+              </ul>
+              </div>
+              <% else %>
+                <p class="margin_left">No image tags registered for this visit.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="visit_map">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="visitMap" style="width:100%;height:400px;"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Export Tab Content -->
+        <div class="tab-pane" id="visit_export">
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="visit-gallery">
+                <ul class="list-inline">
+                  <% @visit.images.each_with_index do |image, index| %>
+                  <li data-imageurl="<%= downloadable_url(image) %>" class="gallery-item">
+                    <%= image_gallery_link_no_tags(image) %>
+                    <span class="label" id="image-<%= index %>">
+                      <%= check_box_tag :is_tagged, image.to_download, nil, class: 'checkbox-image-gallery', data: {index: index, visit_id: image.visit_id} %>
+                      <!-- <span>download</span> -->
+                    </span>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="row export-btns">
+            <div class="col-md-4"><%= download_selection_zip_link(@visit) %></div>
+            <div class="col-md-8">
+              <%= download_zip_link(@visit) %>
+              <% unless admin_signed_in? %>
+                <%= link_to 'Save to Dropbox', '#', class: 'btn btn-success', id: 'dropbox-btn' %>
+              <% end %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script type="text/javascript" src="http://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="<%= escape_javascript ENV['DROPBOX_KEY']%>"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      $(".jThumbnailScroller").thumbnailScroller({
+          scrollerType:"clickButtons",
+          scrollerOrientation:"horizontal",
+          scrollEasing:"easeOutCirc",
+          scrollEasingAmount:800,
+          acceleration:4,
+          scrollSpeed:800,
+          noScrollCenterSpace:10,
+          autoScrolling:0,
+          autoScrollingSpeed:2000,
+          autoScrollingEasing:"easeInOutQuad",
+          autoScrollingDelay:500
+      });
+
+      $("#dropbox-btn").click(function(e) {
+          e.preventDefault();
+
+          var files = [];
+          <% @visit.images.each_with_index do |image, index| %>
+            files.push({'url': "<%= image.remote_url.to_s %>", 'filename': "<%= (@visit.retailer_name + '_' + @visit.complete_address + '_' + @visit.creation_time.to_s(:number) + '.jpg').gsub(/ /, '_') %>"});
+          <% end %>
+          var options = {
+              files: files,
+              success: function () {},
+              progress: function (progress) {},
+              cancel: function () {},
+              error: function (errorMessage) {}
+          };
+          Dropbox.save(options);
+      });
+  });
+
+
+
+  <!-- Arcgis Infographics Widget -->
+  require(["esri/dijit/geoenrichment/Infographic", "esri/tasks/geoenrichment/GeometryStudyArea", "esri/geometry/Point", "esri/IdentityManagerBase","esri/kernel", "esri/tasks/query", "esri/tasks/QueryTask", "dojo/domReady!"], function(Infographic, GeometryStudyArea, Point, IMB, kernel, Query, QueryTask){
+      var query, queryTask, token, infographics, agePyramidInfographics, visitPoint;
+
+      token = { "server": "http://www.arcgis.com/sharing/rest",
+        "userId":"3j4cRXZSGiBo9d7u",
+        "token": "<%= arcgis_token %>",
+        "ssl":false,
+        "expires":7200
+      };
+
+      kernel.id.registerToken(token);
+
+      visitPoint = new Point(<%= @visit.longitude %>, <%= @visit.latitude %>);
+
+      // Query Retail Spending Potential Data : http://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Retail_Spending_Potential/MapServer/1
+      queryTask = new QueryTask("http://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Retail_Spending_Potential/MapServer/1");
+      query = new Query();
+      query.returnGeometry = false;
+      query.geometry = visitPoint;
+      query.outFields = ["OBJECTID", "X15001_A", "RetailSpending_pct_USAvg"];
+
+      function showResults(results) {
+        var retail_goods, retailSpending_pct, regexp
+        regexp = /(above)|(below)/;
+        retails_goods = "$"+accounting.formatNumber(results.features[0]["attributes"]["X15001_A"].toFixed(0));
+        retailSpending_pct = results.features[0]["attributes"]["RetailSpending_pct_USAvg"].replace(regexp, '');
+        $("#retail-goods-avg").html(retails_goods);
+        $("#RetailSpending_pct_USAvg").html(retailSpending_pct);
+        $("#retail_spending_table").show();
+      }
+      queryTask.execute(query, showResults);
+
+      /* Querying the US Key Fact and Ethnicity datas in JSON format */
+      // Ethnicity
+      var ethnicQuery, ethnicQueryTask;
+      ethnicQueryTask = new QueryTask('http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/1');
+      ethnicQuery = new Query();
+      ethnicQuery.returnGeometry = false;
+      ethnicQuery.geometry = visitPoint;
+      ethnicQuery.outFields = ["KeyUSFacts.*"];
+
+      function showEthnicResults(results) {
+        var asian, black, hispanic, other, white, households;
+        asian = results.features[0]["attributes"]["ASIAN"];
+        black = results.features[0]["attributes"]["BLACK"];
+        hispanic = results.features[0]["attributes"]["HISPANIC"];
+        white = results.features[0]["attributes"]["WHITE"];
+        var ethnic_datas = {
+          asian: parseInt(asian),
+          black: parseInt(black),
+          hispanic: parseInt(hispanic),
+          white: parseInt(white),
+          total: (asian + black + hispanic + white)
+        }
+        households = results.features[0]["attributes"]["HOUSEHOLDS"];
+        buildPieChart(ethnic_datas);
+      }
+
+      function buildPieChart(datas) {
+        var asian_pop, black_pop, hisp_pop, white_pop;
+        asian_pop = parseFloat(((datas.asian/datas.total)*100).toPrecision(2));
+        black_pop = parseFloat(((datas.black/datas.total)*100).toPrecision(2));
+        hisp_pop = parseFloat(((datas.hispanic/datas.total)*100).toPrecision(2));
+        white_pop = parseFloat(((datas.white/datas.total)*100).toPrecision(2));
+
+        $("#local_demographics_chart").highcharts({
+          chart: { type: 'pie' },
+          title: { text: 'Local Demographics' },
+          tooltip: {
+            pointFormat: '{point.y}%'
+          },
+          plotOptions: {
+            pie: {
+              cursor: 'pointer',
+              dataLabels: {
+                enabled: false,
+                distance: -30,
+                color: 'white',
+                formatter: function() {return this.point.name}
+              },
+              showInLegend: true
+            }
+          },
+          legend: { enabled: true, align: "center" , layout:"vertical"},
+          title: { text: 'Local Demographics by Zipcode' },
+          series: [{
+            type: 'pie',
+            data: [
+              {
+                name: 'Asian',
+                y: asian_pop
+              },
+              {
+                name: 'Black',
+                y: black_pop
+              },
+              {
+                name: 'Hispanic',
+                y: hisp_pop
+              },
+              {
+                name: 'White',
+                y: white_pop
+              }
+            ]
+          }]
+        });
+      }
+
+      // Medium Household Income : http://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Median_Household_Income/MapServer/1
+      var mhQuery, mhQueryFact;
+      mhQueryFact = new QueryTask('http://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Median_Household_Income/MapServer/1');
+      mhQuery = new Query();
+      mhQuery.returnGeometry = false;
+      mhQuery.geometry = visitPoint;
+      mhQuery.outFields = ["MEDHINC_CY", "TOTPOP_CY", "HINCBASECY"];
+
+      function showHouseholdIncome(results) {
+        var mediumHouseholdIncome, totalHousehold, totpop_cy;
+        totalHousehold = accounting.formatNumber(results.features[0]["attributes"]["HINCBASECY"]);
+        mediumHouseholdIncome = "$"+accounting.formatNumber(results.features[0]["attributes"]["MEDHINC_CY"].toFixed(0));
+        totpop_cy = accounting.formatNumber(results.features[0]["attributes"]["TOTPOP_CY"]);
+        $('#total_hhi').html(mediumHouseholdIncome);
+        $('#total_hh').html(totalHousehold);
+        $('#total_pop').html(totpop_cy);
+        $('#pop_hh_hi').show();
+      }
+
+      var tryCount = 0;
+
+      function errEthnicQueryCallback(tryCount) {
+        tryCount++;
+        if (tryCount <= 3) { execute(tryCount); }
+        return;
+      }
+
+      function errMhQueryCallback(tryCount) {
+        tryCount++;
+        if (tryCount <= 3) { execute(tryCount); }
+        return;
+      }
+
+      function execute(tryCount){
+        ethnicQueryTask.execute(ethnicQuery, showEthnicResults, errEthnicQueryCallback(tryCount));
+        mhQueryFact.execute(mhQuery, showHouseholdIncome, errMhQueryCallback(tryCount));
+      }
+
+      execute(tryCount);
+    }
+  );
+</script>
+

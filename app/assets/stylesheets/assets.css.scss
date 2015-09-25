@@ -1,0 +1,55 @@
+.asset_form {
+  padding-left: 30px;
+  border: 1px solid lightgrey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .form-group {
+    margin-bottom: 0px;
+  }
+
+  .img_avatar {
+    width: 150px;
+    height: auto;
+    margin-bottom: 15px;
+    background-size: contain;
+  }
+}
+
+#assetform #assetprofile{
+  width: 201px;
+}
+
+#assetprofile{
+  p{
+    background-color: #808080;
+    color: #eeeeee;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+.preview{
+  width: 350px;
+}
+
+#slider {
+ width:200px;
+ float:left;
+ display:inline-block;
+ margin-right: 10px;
+ margin-top:10px;
+}
+
+#browse_btn {
+  margin-right: 0px;
+  margin-left: 0px; 
+}
+
+img.photo{
+  width:40px;
+  height:40px;
+  background-color: #e6e6e6;
+  margin: 0 auto;
+}

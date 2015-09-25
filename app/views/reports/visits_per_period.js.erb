@@ -1,0 +1,79 @@
+<% if params[:period] == 'week' %>
+  $(function() {
+    $('#visits_per_week_chart_div').html('');
+    $("#visits_per_week_chartdiv").highcharts({
+      chart: {type: 'column'},
+      title: {text: 'Visits per Week'},
+      xAxis: { 
+        title: {text: 'Weeks'},
+        type:'datetime',
+        tickInterval: <%= 3.week * 1000 %>,
+        labels: false
+      },
+      yAxis: { 
+        title: {text: 'Visit number'},
+        allowDecimal: false,
+        minTickInterval: 1
+      },
+      legend: { enabled: false },
+      tooltip: {
+        formatter: function() {
+          return "Week from " + Highcharts.dateFormat("%A, %B %d %Y", this.x) + ': <b>' + this.y + '</b> visits';
+        }
+      },
+      series: [
+      <% @count.each do |year_weeks_count| %>
+        {
+          pointInterval: <%= 1.day * 7 * 1000 %>,
+          pointStart: <%= Date.today.change(year: year_weeks_count[0]).beginning_of_year.at_midnight.to_i * 1000 %>,
+          name: '<%= year_weeks_count[0] %>',
+          data: [
+            <% year_weeks_count[1].each do |week_count| %>
+              [Date.parse("<%= raw human_readable_week_start(week_count[0], year_weeks_count[0]) %>"), <%= week_count[1].size %>],
+            <% end %>
+          ]
+        },
+      <% end %>
+      ]
+    });
+  });
+<% else %>
+  $(function() {
+    $('#visits_per_month_chart_div').html('');
+    $("#visits_per_month_chart_div").highcharts({
+      chart: { type: 'column' },
+      title: { text: 'Visits per month' },
+      xAxis: { 
+        title: { text: 'Months'},
+        type:'datetime',
+        tickInterval: <%= 1.month * 1000 %>,
+        labels: false
+      },
+      yAxis: { 
+        title: { text: 'Visit number' },
+        allowDecimal: false,
+        minTickInterval: 1 
+      },
+      tooltip: {
+        formatter: function() {
+          return Highcharts.dateFormat("%B %Y", this.x) + ': <b>' + this.y + '</b> visits'
+        }
+      },
+      legend: { enabled: false },
+      series: [
+      <% @count.each do |year_months_count| %>
+        {
+          pointInterval: <%= 1.month * 1000 %>,
+          pointStart: <%= Date.today.change(year: year_months_count[0]).beginning_of_year.at_midnight.to_i * 1000 %>,
+          name: '<%= year_months_count[0] %>',
+          data: [
+            <% year_months_count[1].each do |month_count| %>
+              [Date.parse("<%= raw month_count[0] %>"), <%= month_count[1] %>],
+            <% end %>
+          ]
+        },
+      <% end %>
+      ]
+    });
+  });
+<% end %>

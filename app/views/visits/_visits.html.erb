@@ -1,0 +1,49 @@
+<div class="table-responsive">
+<table cellpadding="5" class="table fix-table table-hover">
+	<thead>
+		<tr style="background:#e6e6e6;">
+			<th width="20" class="id">ID</th>
+			<th width="65">PREVIEW</th>
+			<th width="120"><%= sortable("title","TITLE") %></th>
+			<th width="90"><%= sortable("image_count","IMAGES") %></th>
+			<th width="100"><%= sortable("agent_name","AGENT") %></th>
+			<th width="175"><%= sortable("creation_time","CREATED AT") %></th	>
+		</tr>
+	</thead>
+	</tbody>
+		<% if @pagefromfiltervisits.present? %>
+			<% @pagefromfiltervisits.each do |visit|%>
+		 		<tr style="border-bottom: 1px solid #e6e6e6;cursor:pointer;" data-id="<%= visit.id %>" class="view-visit-detail">
+		 			<td class="id"><%= visit.id %></td>
+		 			<td><%= image_tag thumb_image(visit.images.first),:size=>"40x40" %></td>
+					<td><%= visit.title %></td>
+					<td><%= visit.image_count %></td>
+					<td><%= visit.agent_name %></td>
+					<td><%= formatted_time(visit.creation_time) %></td>
+		 		</tr>
+		  <% end %>
+		 <% end %>
+	</tbody>
+</table>
+</div>
+<%= hidden_field_tag :direction, params[:direction] %>
+<%= hidden_field_tag :sort, params[:sort] %>
+<%= hidden_field_tag :id, params[:id] %>
+
+<div class="pageDiv">
+	<ul class="list-inline">
+		<li>List by:</li>
+		<li><%= link_to "10", visits_path(per_page: "10") %></li>
+		<li><%= link_to "25", visits_path(per_page: "25") %></li>
+		<li><%= link_to "50", visits_path(per_page: "50") %></li>
+	</ul>
+	
+	<%= will_paginate @pagefromfiltervisits if @pagefromfiltervisits.present? %>
+
+	<% if current_agent.asadmin? || admin_signed_in? %>
+		<ul class="list-inline" class="pagination">
+			<li>Export as:</li>
+			<li><%= link_to "Excel file", visits_path(@filtervisits, format: :xls) %></li>
+		</ul>
+	<% end %>
+</div>

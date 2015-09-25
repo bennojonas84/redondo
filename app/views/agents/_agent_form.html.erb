@@ -1,0 +1,88 @@
+<div class="agent_form">
+	<% # if method == "update" %>
+			<%= image_tag ("close.png"),:size=>"25x25", :onclick=>"closeDiv(this)", class: 'pull-right close_btn' %>
+		<div style="clear:both"></div>
+	<% # end %>
+	<%= form_for agent, :html => { multipart: true, class: 'form-vertical' } do |f| %>	
+		<%= f.hidden_field :company_id %>
+		<div class="row">
+			<div class="col-md-12">
+				<div class='form-group'>
+					<%= f.label "PROFILE IMAGE" %>
+					<%= f.file_field :photo, :size=>'20',:style=>'display:none;', :onchange=>"selectphotoFile(this)" %>
+					<%= image_tag f.object.photo.url, id: 'agent_avatar', class: 'img-thumbnail img_avatar' %>
+				</div>
+
+				<div class='form-group'>
+					<%= f.label "FIRST NAME" %>
+					<%= f.text_field :first_name, :required=>true %>
+				</div>
+
+				<div class='form-group'>
+					<%= f.label "LAST NAME" %>
+					<%= f.text_field :last_name %>
+				</div>
+
+				<div class='form-group'>
+					<%= f.label :email %><br>
+					<%= f.text_field :email, :required=>true, :pattern => '[^@]+@[^@]+\.[a-zA-Z]{2,6}' %>
+				</div>
+
+				<% if method == "update" %>
+					<% if current_agent.company_user==true %>
+						<%= link_to("Re-Confirm Agent Credentials","/reconfirm?id=#{agent.id}")%>
+						<div style="clear:both;height: 5px;"></div>
+					<% end %>
+					<!--
+					<% if current_agent.company_user==true && current_agent.asadmin==1 %>	
+						<% if agent.company_user == true %>
+							<%= link_to("Re-Confirm","/reconfirm?id=#{agent.id}")%>
+						<% end %>
+					<% elsif current_agent.company_user==true && current_agent.asadmin!=1 %>
+							<%= link_to("Re-Confirm","/reconfirm?id=#{agent.id}" )%>
+					<% end %>
+					-->
+				<% end %>
+
+				<div class='form-group'>
+					<%= f.label :PASSWORD, :class=>'nodisplay' %>
+					<%= f.password_field :password %>
+				</div>
+
+				
+				<div class='form-group'>
+					<% if agent.new_record? %>
+						<%= f.submit "Invite",:class=>"btn btn-success" %>
+						<%= link_to( "Cancel", '#', :class=>'btn btn-default', :onclick=>"closeDiv($('.close_btn'))")%>
+						<!--
+						<% if current_agent.company_user==true && current_agent.asadmin==1 %>
+							<% if agent.company_user == true %>
+								<%= f.submit "Update",:class=>"btn btn-default" %>
+							<% end %>
+						<% elsif current_agent.company_user==true && current_agent.asadmin!=1 %>
+							<%= f.submit "Update",:class=>"btn btn-default" %>
+						<% end %>
+					-->
+					<% else %>
+						<% if current_agent.company_user==true %>
+							<%= f.submit "Update",:class=>"btn btn-primary" %>
+						<% end %>
+					<% end %>
+
+					<% if current_agent.company_user==true && !agent.new_record? %>
+					  <%= link_to "Delete", @agent, :method=>:delete, :class=>"btn btn-danger", data: { confirm: 'Are you sure that you want to DELETE this?'} %>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	  $('#agent_avatar').click(function(e) {
+	  	e.preventDefault();
+	  	photoBrowse();
+	  })
+	});
+</script>

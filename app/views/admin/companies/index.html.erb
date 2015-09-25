@@ -1,0 +1,59 @@
+<%provide(:title,'VIEW COMPANIES')%>
+<div class="container">
+	<div class="row">
+
+		<div class="col-md-12 admin-btns">
+			<div class="col-md-4">
+				<%= link_to "View History", histories_path, class: "btn btn-default" %>
+			</div>
+			<div class="col-md-4">
+				<%= link_to "New Company", new_admin_company_path, class: "btn btn-default" if can?(:manage, Company) %>
+			</div>
+			<div class="col-md-4">
+				<%= link_to "New Uber-Admin", new_admin_registration_path(), class: "btn btn-default" if can?(:manage, Admin) %>
+			</div>
+		</div>
+
+		<div class='row'>
+			<div class="col-md-8">
+				<table cellpadding="5" id="companytable" class="fix-table">
+					<thead>
+						<tr style="background:#e6e6e6;">
+							<td width="10" class="id">ID</td>
+							<td width="65">LOGO</td>
+							<td width="150">NAME</td>
+							<td width="150">USERNAME</td>
+							<td width="75">ACTION</td>
+						</tr>
+					</thead>
+					<tbody>
+						<% @companies.each do |company|%>
+						<tr style="border-bottom: 1px solid #e6e6e6;cursor:pointer;" >
+							<td class="id"><%= company.id %></td>
+							<td class="show-company-form", data-id="<%= company.id %>"><%= image_tag company.logo.url(:thumb) %></td>
+							<td class="show-company-form", data-id="<%= company.id %>"><%= company.name %></td>
+							<td class="show-company-form", data-id="<%= company.id %>"><%= company.agents.find_by_company_user('true').try(:email) %></td>
+							<td><%= link_to "Manage",{ :controller=>'admin/companies', :action=>'manage', :superagent_id=>company.agents.find_by_company_user('true').try(:id)},:class=>'btn' %></td>
+						</tr>
+						<% end%>
+					</tbody>
+				</table>
+				<div class="pageDiv">
+					<ul class="list-inline" class="pagination">
+						<li>List by:</li>
+						<li><%= link_to "10", admin_companies_path(per_page: "10") %></li>
+						<li><%= link_to "25", admin_companies_path(per_page: "25") %></li>
+						<li><%= link_to "50", admin_companies_path(per_page: "50") %></li>
+					</ul>
+					<%= will_paginate @companies%>
+				</div>
+			</div>
+			<div id="loading" class="col-md-4"><%= image_tag("loading.gif") %></div>
+			<div id="companyform" class="col-md-4"></div>
+		</div>
+		
+<!-- 		<div id="adminpanel" style="display:none;" class="col-md-4 offset-7">
+			COMPANY ADMIN PANEL
+		</div> -->
+	</div>
+</div>

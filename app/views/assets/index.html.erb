@@ -1,0 +1,64 @@
+<%provide(:title,'VIEW ASSETS')%>
+<div class="container">
+	<!-- Breadcrumb -->
+	<div class="row">
+		<div class="col-md-12 breadplus">
+			<ol class='breadcrumb'>
+				<li><a href="#">Assets</a></li>
+			</ol>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-3" id="side_menu">
+			<%= render partial: 'layouts/side_menu', locals: {companyuser: @companyuser, agents: @agents, assets: @assets, visits: @visits} %>
+		</div>
+
+		<div class="col-md-9 visits_content">
+			<header class='row visits-table-header'>
+				<div class="col-md-12 title">
+					<h3 class="pull-left">
+						VIEW ASSETS
+					</h3>
+					<% if current_agent.company_user == true %>
+						<%= link_to 'New Asset', new_asset_path(:company_id=>@companyuser.id), class: 'btn btn-primary pull-left', remote: true %>
+					<% end %>
+				</div>
+			</header>
+			
+			<div class="col-md-7">			
+				<table cellpadding="5" class="fix-table">
+					<tbody>
+						<% @assets.each do |asset|%>
+						<tr style="border-bottom: 1px solid #e6e6e6;cursor:pointer;" class="show-asset-form">
+							<td class="id"><%= asset.id %></td>
+							<td>
+								<!-- <div class="photo"> -->
+								<a href="<%= asset.image.url %>" class="fancybox" rel="group1">
+									<%= image_tag asset.image.url(:thumb), class: 'photo' %>
+								</a>
+								<!-- </div> -->
+							</td>
+							<td colspan="2"><%= asset.description %></td>
+							<td><%= visits_for(asset) %></td>																   			 
+						</tr>
+						<% end%>
+					</tbody>
+				</table>
+				<div class="pageDiv">
+					<ul class="list-inline" class="pagination">
+						<li>List by:</li>
+						<li><%= link_to "10", assets_path(id: params[:id], per_page: "10") %></li>
+						<li><%= link_to "25", assets_path(id: params[:id], per_page: "25") %></li>
+						<li><%= link_to "50", assets_path(id: params[:id], per_page: "50") %></li>
+					</ul>
+					<%= will_paginate @assets%>
+				</div>
+			</div>
+			
+			<div id="loading" class="col-md-5"><%= image_tag("loading.gif") %></div>
+			<div id="assetform" class="col-md-5"></div>
+		</div>
+
+	</div>
+</div>

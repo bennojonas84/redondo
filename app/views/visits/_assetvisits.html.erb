@@ -1,0 +1,37 @@
+<table cellpadding="5" class="fix-table table-hover" style="width: 655px;">
+  <thead>
+    <tr style="background:#e6e6e6;">
+      <td width="20" class="id">ID</td>
+      <td width="65">PREVIEW</td>
+      <td width="120"><%= sortable("title","TITLE") %></td>
+      <td width="90"><%= sortable("image_count","IMAGES") %></td>
+      <td width="100"><%= sortable("agent_name","AGENT") %></td>
+      <td width="175"><%= sortable("creation_time","CREATED AT") %></td>
+    </tr>
+  </thead>
+  </tbody>
+    <% @assetvisits.each do |visit|%>
+      <tr style="border-bottom: 1px solid #e6e6e6;cursor:pointer;" data-id="<%= visit.id %>" class="view-visit-detail">
+        <td class="id"><%= visit.id %></td>
+        <td><%= image_tag thumb_image(visit.images.first),:size=>"40x40" %></td>
+      <td><%= visit.title %></td>
+      <td><%= visit.image_count %></td>
+      <td>
+        <%= visit.agent.first_name if !visit.agent.first_name.nil? %>&nbsp;
+          <%= visit.agent.last_name if !visit.agent.last_name.nil? %>
+      </td>
+      <td><%= visit.creation_time %></td>
+      </tr>
+    <% end%>
+  </tbody>
+</table>
+
+<div class="pageDiv">
+  <ul class="list-inline">
+    <li>List by:</li>
+    <li><%= link_to "10", visits_path(per_page: "10") %></li>
+    <li><%= link_to "25", visits_path(per_page: "25") %></li>
+    <li><%= link_to "50", visits_path(per_page: "50") %></li>
+  </ul>
+  <%= will_paginate @assetvisits %>
+</div>

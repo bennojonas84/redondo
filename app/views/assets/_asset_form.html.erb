@@ -1,0 +1,69 @@
+<div class="asset_form">
+	<% # if method == "update" %>
+		<%= image_tag ("close.png"),:size=>"25x25", :onclick=>"closeDiv(this)", class: 'pull-right close_btn' %>
+		<div class="clearfix"></div>
+	<% # end %>
+
+	<%= form_for asset, :html => { :multipart => true, class: 'form-vertical' } do |f| %>	
+		<%= f.hidden_field :company_id %>
+		<div class='form-group'>
+			<%= f.label "DESCRIPTION", :style=>"text-transform:uppercase;" %>
+			<%= f.text_field :description %>
+		</div>
+
+		<div class='form-group'>
+			<%= f.label "IMAGE URL", :style=>"text-transform:uppercase;"%>
+			<%= f.file_field :image, :size=>'20',:style=>'display:none;', :onchange=>"selectphotoFileAsset(this)" %>
+			<%= image_tag f.object.image.url(:medium), id: 'asset_avatar', class: 'img-thumbnail img_avatar' %>
+		</div>
+		
+		<span class="help-inline" style="margin-bottom: 10px;">Transparent PNG's Only</span>
+		<div style="clear:both;"></div>
+
+		<div class="form-group">
+			<%= f.label :percent_lift, "ROI %" %>
+			<%= f.text_field :percent_lift, class: "input-mini" %>
+			<%= range_field_tag :percent_lift_slider,nil, in: 1..100 %>
+		</div>
+		
+		<div style="clear:both;"></div>
+		<div class='form-group'>
+			<% unless asset.new_record? %>
+				<% if current_agent.company_user==true %>
+					<%= f.submit "Update",:class=>"btn btn-primary pull-left" %>
+				<% end %>
+			<% else %>
+				<%= f.submit "Create",:class=>"btn btn-primary pull-left" %>
+				<%= link_to( "Cancel", assets_path(:id=> asset.company_id), :class=>'btn btn-danger pull-left')	%>
+			<% end %>
+		
+			<% if current_agent.company_user==true && !asset.new_record? %> 
+	  		<%= link_to "Delete", asset_path(asset.id), method: :delete, :class=>"btn 	btn-danger pull-left", data: {confirm: 'Are you sure that you want to DELETE this?'} %>
+			<% end %>
+			<div style="clear:both;"></div>
+		</div>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	  $("#percent_lift_slider").change(function() {
+	    $("#asset_percent_lift").val($(this).val());
+	  });
+	  
+	  $("#asset_percent_lift").change(function() {
+	    $('#percent_lift_slider').val($(this).val());
+	  });
+
+	  if ($('#asset_percent_lift').val() == undefined || $('#asset_percent_lift').val() == '') {
+	    $("#asset_percent_lift").val( $("#percent_lift_slider").val() );
+	  } else {
+	    $('#percent_lift_slider').val( $('#asset_percent_lift').val() );
+	  }
+
+	  $('#asset_avatar').click(function(e) {
+	  	e.preventDefault();
+	  	photoBrowseAsset();
+	  })
+	});
+</script>

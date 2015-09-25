@@ -1,0 +1,423 @@
+$my-blue:#0065a2;
+$my-red:#ee3e42;
+
+#side_menu.col-md-3 {
+  margin-bottom: 60px;
+
+  #companylogo img {
+    width: 150px;
+    height: auto;
+    background-size: contain;
+  }
+  #tab {
+//    margin-top:10px;
+    ul {
+      list-style: none;
+      width:120px;
+      margin:0;
+      padding:0;
+      outline:0;
+      font-size:100%;
+      li {
+        &.first {
+          padding-left:4px;
+          margin-bottom:10px;
+          color:$my-red;
+          font-size:1.35em;
+          font-weight: bold;
+          text-align: center;
+          width: 150px;
+          background-image:none;
+        }
+        background-image: image-url('sideNavLiBG.png');
+        background-position: left bottom;
+        background-position-x: 16px;
+        background-repeat:no-repeat;
+        font-size:1em;
+        line-height:1.65em;
+        a.tab, span.menu {
+          margin-left: 5px;
+          padding-top:4px;
+          padding-bottom:4px;
+          padding-left:4px;
+          display:block;
+          width:116px;
+          &:hover{
+            color:$my-red;
+            text-decoration: none;
+          }
+          span.count {
+            float: right;
+            margin-right:20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  #companylogo {
+    float: right;
+    margin-top: 25px;
+  }
+
+  #tab {
+    float: left;
+    margin-left: 0px;
+  }
+}
+
+div.visitdetail {
+  margin-top:20px;
+  display:block;
+  border: 4px solid #cccccc;
+  border-top:none;
+  span.visit-url {
+    display:list-item;
+    overflow:auto;
+  }
+}
+
+#visits_page {
+  margin-bottom: 60px;
+}
+
+#visitdetails {
+  margin-bottom: 30px;
+  header {
+    background: none;
+    margin-bottom: 10px;
+    .no-margin {
+      margin:0px;
+    }
+    h3.inline {
+      margin-top: 0px;
+      display:inline-block;
+    }
+  }
+  span.rating-stars {
+    float:right;
+    width:120px;
+    background:blue;
+  }
+  img.thumb {
+    width: auto;
+    height: 90px;
+  }
+
+  img.thumb_export {
+    width: 100%;
+    height: 100%;
+  }
+
+  .gallery-item {
+    width: 120px;
+    height: auto;
+    margin: 10px;
+  }
+
+  .mainpic-intels {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    margin-top: 10px;
+    ul.list-inline, {
+      margin-top:20px;
+
+
+      li {
+        margin-bottom: 10px;
+        width:110px;
+        height:100px;
+        text-align: center;
+
+        span.label {
+          /*background-color: $my-blue;*/
+          margin-top: -2px;
+          color: black;
+          font-weight: normal;
+          width:100%;
+          .input { margin-left:0px; }
+          span {}
+        }        
+      }
+      span.img-index {
+        display: block;
+        text-align: center;
+        width: 220px;
+      }
+    }
+  }
+
+  #mainpic-intels {
+    #mainpic {
+      margin-top: 5px;
+      text-align: center;
+      img {
+        height: 300px;
+        width: 100%;
+      }
+    }
+
+    #visit-intel {
+      .table-caption {
+        text-align: right;
+      }
+      table {
+        margin: 10px 0px 20px 0px;
+        color: black;
+
+        tr {
+          td:first-child {
+            padding-left: 20px;
+            padding-bottom: 6px;
+            padding-bottom: 6px;
+            text-align: left;
+            width: 40%;
+            word-wrap: break-word;
+            line-height: 20px;
+            font-size: 14px;
+          }
+
+          td:last-child {
+            padding-left: 15px;
+            text-align: left;
+            width: 60%;
+            font-size: 14px;
+            line-height: 20px;
+          }
+        }
+
+        tr:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  #detail_comment {
+    blockquote{
+      margin-left: 30px;
+      border-color: dimgrey;
+      p {
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+  }
+
+  #visit_detail_body {
+    #gallery {
+      padding: 0px 15px;
+      #thumbs_scroll {
+      }
+    }
+
+    #gallery-esridatas {
+      a.no-bg {
+        &:hover {
+          background: none;
+        }
+      }
+
+      table#spending, #keyfacts, #ethnicity {
+        width:100%;
+        background-color: #4444;
+        td { font-size:105%; }
+        tr.gray { background: #666666; color:white; }
+        tr.dark { background: #444444; color:white; }
+        tr.silver { background: silver; color:white; }
+        td.green { background: #76ed0f; color:black; width:119px; }
+        td.blue { background: #78bdff; color:black; }
+        td.right-align { 
+          text-align: right; 
+          a {
+            color: silver;
+            &:hover { color: silver; }
+          }
+        }
+      }
+
+      #infographics {
+        div.WidgetBack {
+          width: 100% !important;
+          background: transparent;
+
+          div.BaseWidget_HeaderPane {
+            text-align: center;
+            background: silver;
+            padding: 8px;
+            width: 100%;
+          }
+          div.BaseWidget_ContentPane {
+            width:100%;
+            table.RelatedVariables_Table {
+              width:100%;
+              text-align: left;
+              td { 
+                padding: 8px;
+                line-height: 20px;
+                font-size: 130%;
+                &.RelatedVariables_TextColumnHeader { display:none;}
+                &.RelatedVariables_ValueColumnHeader { display:none;}
+              }
+              tr {
+                padding-top: 10px;
+                color:white;
+                background: #666666;
+                td.RelatedVariables_TextColumn {}
+              }
+              tr.AlternatingRow { 
+                color: white;
+                background: #444444; 
+              }
+            }
+          }
+        }        
+      }
+
+    }
+  }
+
+  #visitMap.map {
+    width:100%;
+    div#visitMap_root.container {
+      height:200px;
+    }
+  }
+
+  #visit_tags {
+    ul.inline {
+      /*margin-left:25px;*/
+      li { 
+        list-style: none; 
+      }
+    }
+    p.margin_left {margin-left:25px;}
+  }
+
+  #visit_export {
+    .export-btns {
+      margin-bottom: 15px;
+
+      #dropbox-button {
+        margin-left: 23px;
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+#search_result {
+  display: none;
+}
+
+#accordion
+{
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  position: absolute;
+  zindex: 2;
+  top: 10px;
+  left: 70px; 
+  width: 230px;
+
+  input[type="text"]{
+    width: 120px;
+  }
+
+  .ui-accordion-content
+  {
+    height: 70px;
+    padding: 15px;
+    overflow: hidden;
+  }
+
+  h3
+  {
+    color: #F28037;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  li
+  {
+    font-size: 14px;
+    font-weight: bold;
+    &:hover, &:focus, &.selected {
+      background-color: #f1f1f1;
+      background-image: linear-gradient(to bottom, #999999, #666666);
+      background-repeat: repeat-x;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  }
+
+  ul
+  {
+    list-style: none;
+  }
+
+  #div-race
+  {
+    height: 100px;
+  }
+
+  .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
+  {
+    font-size: 14px;
+  }
+}
+
+.visits_content {
+//  margin-top: -20px;
+
+  .visits-table-header {
+    background-color:transparent;
+    border-bottom: 1px solid #eee;
+    padding-top:5px;
+    margin-bottom:15px;
+    line-height: 30px;
+    div.title {
+      font-weight: bold;
+
+      h3 {
+        margin: 0px;
+      }
+
+      a {
+        margin-left: 100px;
+        margin-top: 0px;
+        margin-bottom: 10px;
+      }
+      @media (max-width: 437px) {
+        a {
+          margin-left: 20px;
+        }
+      }
+      
+      @media (max-width: 357px) {
+        a {
+          float: right !important;
+        }
+      }
+    }
+    .visits-count { }
+    #search-form {
+      text-align: right;
+    }
+    #visits_search {
+      input#search.form-control {
+        margin-bottom:0px;
+      }
+      button.btn.btn-default {
+        margin:0;
+      }
+    }
+  }
+}
+
+.large_thumb {
+  width: 100%;
+}

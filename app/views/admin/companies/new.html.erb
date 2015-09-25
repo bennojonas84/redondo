@@ -1,0 +1,13 @@
+<%provide(:title,'CREATE COMPANY')%>
+<div class="container">
+	<div class="row">
+		<div id="companyprofile" class="col-md-4">
+			<p>COMPANY PROFILE</p>
+		</div>
+	</div>
+	<div class="row">
+		<div id="createcompanyform" class="col-md-4">
+			<%= render :partial => 'company_form', :locals => { :company=>@company, :method => "create", :action => "create" } %>
+		</div>
+	</div>
+</div> 

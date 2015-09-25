@@ -1,0 +1,6 @@
+downloaded some of visit's images
+<% if activity.trackable %>
+  <%= link_to activity.trackable.title, activity.trackable %> visit's images on <%= activity.created_at.to_formatted_s(:long) %>
+<% else %>
+  which has since been removed
+<% end %>

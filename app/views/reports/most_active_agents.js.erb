@@ -1,0 +1,30 @@
+$(function () {
+  $("#most_active_agents_chart").html('');
+  $("#most_active_agents_chart").highcharts({
+    chart: { type: 'pie' },
+    title: { text: 'Most Active Agents' },
+    tooltip: {
+      pointFormat: '{point.y} visits'
+    },
+    plotOptions: {
+      pie: {
+        cursor: 'pointer',
+        dataLabels: { enabled: false },
+        showInLegend: true
+      }
+    },
+    legend: { enabled: false },
+    series: [{
+      type: 'pie',
+      data: [
+        <% @report[:most_active_agents].each do |agent_count| %>
+          ["<%= raw agent_count[0] %>", <%= agent_count[1] %>],
+        <% end %>
+      ]
+    }]
+  });
+  // scroll to window bottom
+  var x = 0;
+  y = document.height;
+  window.scroll(x,y);
+});

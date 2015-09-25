@@ -1,0 +1,47 @@
+// Place all the styles related to the Reports controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#report-title {
+  margin-bottom: 0px;
+  margin-top: 15px;
+  color: #777;
+  font-weight: bold;
+}
+
+div#zipcode-results {
+  margin-top:10px;
+}
+
+table.table tr td.centered { text-align: center; }
+
+header.report {
+  display: inline-block;
+  width:100%;
+  text-align: left;
+  padding:5px;
+  margin-bottom: 10px;
+  margin-top:10px;
+  color: darkgrey;
+}
+span.btn.xls_report, a.btn.xls_report {
+  vertical-align: top;
+  float:right;
+  margin-top: 0px;
+}
+
+#period_visits_report, #zipcode_visits_report, #enthusiasm_quality_report, #active_agents_report, #visits-per-week {
+  form.form-inline {
+    margin-bottom:10px !important;
+  }
+}
+
+#period_visits_report, #zipcode_visits_report, #enthusiasm_quality_report, #active_agents_report form.form-inline {
+  input { 
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-bottom:0px;
+  }
+  button[type="submit"] {
+    margin-top:0px;
+  }
+}
